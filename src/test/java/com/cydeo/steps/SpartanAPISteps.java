@@ -1,5 +1,6 @@
 package com.cydeo.steps;
 
+import com.cydeo.utility.DB_Util;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -23,6 +24,7 @@ public class SpartanAPISteps {
     RequestSpecification givenPart;
     Response response;
     ValidatableResponse thenPart;
+    public static  int  lastId;
 
 
     @Given("the base_uri and base_path set")
@@ -115,6 +117,47 @@ public class SpartanAPISteps {
     public void theFieldValueWithThisPathShouldBeEqualTo(String jsonPath, int expectedValue) {
 
         thenPart.body(jsonPath, is(expectedValue));
+
+    }
+
+    @And("I have valid spartan id")
+    public void iHaveValidSpartanId() {
+
+        // get a valid spartan Id and make it available for all methods
+
+        lastId = givenPart.get("/spartans").path("id[-1]");
+        // can we just set this id into path variable in here directly
+        givenPart.pathParam("id", lastId ) ;
+
+    }
+
+
+//
+//    @When("I send get request to {string} endpoint with valid id")
+//    public void iSendGetRequestToEndpointWithValidId(String endPoint) {
+//
+//
+//
+//    }
+
+    @When("I send get request to {string} endpoint")
+    public void i_send_get_request_to_endpoint(String endpoint) {
+
+        System.out.println(" i_send_get_request_to_endpoint " + endpoint);
+        // here send your request and save the result into variable and make it global
+        response = givenPart
+                .when()
+                .get(endpoint).prettyPeek() ;
+
+    }
+
+    @Then("the spartan data with that id matches values in the database")
+    public void theSpartanDataWithThatIdMatchesValuesInTheDatabase() {
+
+        //select * from spartan where spartan_id = validId here
+
+        DB_Util.runQuery("select * from spartans where spartan_id = " + lastId);
+        DB_Util.displayAllData();
 
     }
 }
