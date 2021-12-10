@@ -11,5 +11,5 @@ Feature: Spartan API Single Data
       And I ask for "json" response payload
       When I send get request to "/spartans/{id}" endpoint
       Then I should get status code 200
-      Then the spartan data with that id matches values in the database
+    #  Then the spartan data with that id matches values in the database
 

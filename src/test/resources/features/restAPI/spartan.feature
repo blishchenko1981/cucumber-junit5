@@ -12,7 +12,7 @@ Feature: spartan App rest API up and running
     Then The response format should be "text/plain;charset=UTF-8"
     And the response payload should be Hello from Sparta
     
-    
+    @hello
     Scenario: Should be able to call/spartans to get all data in Json format
       Given the base_uri and base_path set
       And I ask for "json" response payload
