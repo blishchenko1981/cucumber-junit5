@@ -14,70 +14,85 @@
     </properties>
 
     <dependencies>
-
+        <!--        latest cucumber version -->
         <dependency>
             <groupId>io.cucumber</groupId>
             <artifactId>cucumber-java</artifactId>
             <version>7.1.0</version>
         </dependency>
 
+        <!-- add cucumber junit platform dependency instead of cucumber junit to junit5-->
         <dependency>
             <groupId>io.cucumber</groupId>
             <artifactId>cucumber-junit-platform-engine</artifactId>
             <version>7.1.0</version>
-            <scope>compile</scope>
         </dependency>
-
+        <!--        for junit 5 assertions -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
             <version>5.8.2</version>
         </dependency>
+
+        <!--        reporting   -->
+
+        <!--        junit5 suite dependency -->
         <dependency>
             <groupId>org.junit.platform</groupId>
             <artifactId>junit-platform-suite</artifactId>
             <version>1.8.2</version>
         </dependency>
-
+        <!--        RestAssured dependency -->
         <dependency>
             <groupId>io.rest-assured</groupId>
             <artifactId>rest-assured</artifactId>
             <version>4.4.0</version>
         </dependency>
-
+        <!--        RestAssured json schema dependency -->
         <dependency>
-            <groupId>com.jayway.restassured</groupId>
+            <groupId>io.rest-assured</groupId>
             <artifactId>json-schema-validator</artifactId>
-            <version>2.9.0</version>
+            <version>4.4.0</version>
         </dependency>
 
+        <!--        For Serialization and De-Serialization -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.13.0</version>
+        </dependency>
+        <!--        Lombok for pojo -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.18.22</version>
         </dependency>
 
+        <!--        Selenium Dependency -->
+
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
             <version>4.1.0</version>
         </dependency>
-
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>2.13.0</version>
-        </dependency>
+        <!--        WEBDRIVER MANAGER -->
         <dependency>
             <groupId>io.github.bonigarcia</groupId>
             <artifactId>webdrivermanager</artifactId>
             <version>5.0.3</version>
         </dependency>
-
+        <!--        Faker -->
         <dependency>
             <groupId>com.github.javafaker</groupId>
             <artifactId>javafaker</artifactId>
             <version>1.0.2</version>
+        </dependency>
+
+        <!--         Database dependencies for oracle and mysql -->
+        <dependency>
+            <groupId>com.oracle.database.jdbc</groupId>
+            <artifactId>ojdbc8</artifactId>
+            <version>21.3.0.0</version>
         </dependency>
 
         <dependency>
@@ -86,6 +101,5 @@
             <version>8.0.25</version>
         </dependency>
 
-        
     </dependencies>
 </project>

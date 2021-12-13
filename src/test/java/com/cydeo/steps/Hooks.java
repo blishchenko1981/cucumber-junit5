@@ -7,8 +7,9 @@ import io.cucumber.java.Before;
 
 public class Hooks {
 
-    @Before("db")
+    @Before("@db")
     public void setupDBconnection(){
+        System.out.println("this is hooks class running");
 
         String url = ConfigReader.read("sp.database.url");
         String username = ConfigReader.read("sp.database.username");
