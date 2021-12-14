@@ -15,7 +15,9 @@ import static io.cucumber.junit.platform.engine.Constants.*;
 @ConfigurationParameter(key= PLUGIN_PUBLISH_ENABLED_PROPERTY_NAME, value = "true")
 @ConfigurationParameter(key = PLUGIN_PROPERTY_NAME  ,
         value = "pretty, json:target/cucumber.json, html:target/cucumber.html" )
-@ConfigurationParameter(key = FILTER_TAGS_PROPERTY_NAME, value = "@hello")
+
+//@ConfigurationParameter(key = EXECUTION_DRY_RUN_PROPERTY_NAME, value = "true")
+//@ConfigurationParameter(key = FILTER_TAGS_PROPERTY_NAME, value = "@db")
 public class TestRunner {
 
 

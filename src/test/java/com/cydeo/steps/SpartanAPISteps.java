@@ -1,22 +1,27 @@
 package com.cydeo.steps;
 
 import com.cydeo.utility.DB_Util;
+import com.github.javafaker.Faker;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.RestAssured;
+
+import static io.restassured.RestAssured.*;
+
 import io.restassured.http.ContentType;
-import io.restassured.response.Response;
 import io.restassured.response.ValidatableResponse;
 import io.restassured.specification.RequestSpecification;
 import org.junit.jupiter.api.Assertions;
-
-import java.util.Map;
-
+import org.junit.jupiter.api.Assertions.*;
+import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
+import io.restassured.response.Response;
 
-import static io.restassured.RestAssured.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 public class SpartanAPISteps {
 
@@ -24,7 +29,8 @@ public class SpartanAPISteps {
     RequestSpecification givenPart;
     Response response;
     ValidatableResponse thenPart;
-    public static  int  lastId;
+    int lastId;
+    public Integer randomSpartanId;
 
 
     @Given("the base_uri and base_path set")
@@ -45,14 +51,16 @@ public class SpartanAPISteps {
         response = givenPart.when()
                 .get(endpoint).prettyPeek();
 
+        //setting the value of validatable response thenPart variable
+
+        thenPart = response.then();
+
     }
 
     @Then("I should get status code {int}")
     public void i_should_get_status_code(Integer expectedStatusCode) {
 
-        System.out.println("should get status code");
-       int statusCode =  response.statusCode();
-        System.out.println("statusCode = " + statusCode);
+        System.out.println("should get status code" + expectedStatusCode);
 
         thenPart = response.then().statusCode(expectedStatusCode);
 
@@ -86,24 +94,28 @@ public class SpartanAPISteps {
 
     @Given("I send the data in json format")
     public void i_send_the_data_in_json_format() {
-       givenPart.contentType(ContentType.JSON) ;
+        givenPart.contentType(ContentType.JSON);
 
     }
+
     @Given("I am sending below valid spartan data")
-    public void i_am_sending_below_valid_spartan_data(Map<String,Object> requestPayloadMap) {
+    public void i_am_sending_below_valid_spartan_data(Map<String, Object> requestPayloadMap) {
 
         givenPart.body(requestPayloadMap);
 
     }
+
     @When("I send POST request to endpoint {string}")
     public void i_send_post_request_to_endpoint(String endpoint) {
 
         response = givenPart.when().post(endpoint);
+        thenPart = response.then();
     }
+
     @Then("The success field value should be {string}")
     public void the_success_field_value_should_be(String message) {
 
-        thenPart.body("success", is( "A Spartan is Born!" ) ) ;
+        thenPart.body("success", is("A Spartan is Born!"));
     }
 
 
@@ -113,6 +125,7 @@ public class SpartanAPISteps {
         thenPart.body(jsonPath, is(expectedValue));
 
     }
+
     @Then("the field value with this path {string} should be equal to {int}")
     public void theFieldValueWithThisPathShouldBeEqualTo(String jsonPath, int expectedValue) {
 
@@ -127,7 +140,7 @@ public class SpartanAPISteps {
 
         lastId = givenPart.get("/spartans").path("id[-1]");
         // can we just set this id into path variable in here directly
-        givenPart.pathParam("id", lastId ) ;
+        givenPart.pathParam("id", lastId);
 
     }
 
@@ -147,7 +160,8 @@ public class SpartanAPISteps {
         // here send your request and save the result into variable and make it global
         response = givenPart
                 .when()
-                .get(endpoint).prettyPeek() ;
+                .get(endpoint).prettyPeek();
+        thenPart = response.then();
 
     }
 
@@ -158,6 +172,120 @@ public class SpartanAPISteps {
 
         DB_Util.runQuery("select * from spartans where spartan_id = " + lastId);
         DB_Util.displayAllData();
+
+        thenPart.body("id", is(lastId))
+                .body("name", is(DB_Util.getCellValue(1, "NAME")))
+                .body("gender", is(DB_Util.getCellValue(1, "GENDER")))
+                .body("phone.toString()", is(DB_Util.getCellValue(1, "PHONE")));
+
+
+    }
+
+    @When("I send delete request to {string} endpoint")
+    public void iSendDeleteRequestToEndpoint(String endpoint) {
+        response = givenPart.when().delete(endpoint);
+        thenPart = response.then();
+
+    }
+
+    @And("I have valid random spartan id")
+    public void iHaveRandomSpartanId() {
+
+        // send gt request to GET/ spartans
+
+        List<Integer> allIds = givenPart.get("/spartans").path("id");
+
+        // get random ID at a index from 0 to allIds.size()-1
+
+        Random random = new Random();// class from java.util package getting random number
+        int randomIndex = random.nextInt(allIds.size() - 1);
+
+        System.out.println("randomIndex = " + randomIndex);
+        randomSpartanId = allIds.get(randomIndex);
+
+        // set this ID to path
+        givenPart.pathParam("id", randomSpartanId);
+
+
+    }
+
+
+    @When("I send put request to {string} endpoint")
+    public void iSendPutRequestToEndpoint(String endpoint) {
+
+        response = givenPart.when().put(endpoint);
+        thenPart = response.then();
+
+    }
+
+    @When("I send patch request to {string} endpoint")
+    public void iSendPatchRequestToEndpoint(String endpoint) {
+
+        response = givenPart.when().patch(endpoint);
+        thenPart = response.then();
+
+    }
+
+    @And("I search for spartan with the name")
+    public void iSearchForSpartanWithTheName() {
+
+    }
+
+    @And("I search for spartan with name contains {string} and gender {string}")
+    public void iSearchForSpartanWithNameContainsAndGender(String nameParam, String genderParam) {
+
+        givenPart
+                .queryParam("nameContains", nameParam)
+                .queryParams("gender", genderParam);
+    }
+
+
+    @Then("All Names in the result should contains {string} and gender Should be {string}")
+    public void allNamesInTheResultShouldContainsAndGenderShouldBe(String expectedName, String expectedGender) {
+
+        thenPart.body("content.gender", everyItem(is(expectedGender)))
+                .body("content.name", everyItem(containsStringIgnoringCase(expectedName)));
+
+
+    }
+
+
+    @Then("the spartan count in response should match the count in database {string} and gender should be {string}")
+    public void theSpartanCountInResponseShouldMatchTheCountInDatabaseAndGenderShouldBe(String name, String gender) {
+
+        // QUERY TO GET ALL DATA WITH NAME contains Ea (ignore case) and GENDER is Male
+        // SELECT * FROM SPARTANS
+        // WHERE UPPER(NAME) LIKE '%EA%' AND GENDER = 'Male'
+        String query =  "SELECT count(*) FROM SPARTANS " +
+                " WHERE UPPER(NAME) LIKE '%"+ name.toUpperCase()  +"%' " +
+                " AND GENDER = '"+gender+"'" ;
+        DB_Util.runQuery(query);
+        DB_Util.displayAllData();
+
+        thenPart.body("totalElement.toString()", is (DB_Util.getCellValue(1,1)));
+
+
+    }
+
+    @Then("The search count for name contains {string} and gender {string} should match the count in the database")
+    public void theSearchCountForNameContainsAndGenderShouldMatchTheCountInTheDatabase(String name, String gender) {
+
+        // QUERY TO GET ALL DATA WITH NAME contains Ea (ignore case) and GENDER is Male
+        // SELECT * FROM SPARTANS
+        // WHERE UPPER(NAME) LIKE '%EA%' AND GENDER = 'Male'
+        String query =  "SELECT count(*) FROM SPARTANS " +
+                " WHERE UPPER(NAME) LIKE '%"+ name.toUpperCase()  +"%' " +
+                " AND GENDER = '"+gender+"'" ;
+
+        System.out.println("query = " + query);
+        DB_Util.runQuery(query) ;
+        DB_Util.displayAllData();
+
+        // verify the data match
+        // thenPart.body("totalElement.toString()" ,  is(  DB_Util.getCellValue(1,1)   )     ) ;
+        // or just convert the db result to number
+        int expectedDBResult = Integer.parseInt(  DB_Util.getCellValue(1,1)  ) ;
+        thenPart.body("totalElement", is(expectedDBResult) );
 
     }
 }
