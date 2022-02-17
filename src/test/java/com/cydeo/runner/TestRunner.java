@@ -10,14 +10,14 @@ import static io.cucumber.junit.platform.engine.Constants.*;
 
 @Suite
 @IncludeEngines("cucumber")
-@SelectClasspathResource("features/restAPI")
+@SelectClasspathResource("features/front_end")
 @ConfigurationParameter(key= GLUE_PROPERTY_NAME, value = "com.cydeo.steps")
 @ConfigurationParameter(key= PLUGIN_PUBLISH_ENABLED_PROPERTY_NAME, value = "true")
 @ConfigurationParameter(key = PLUGIN_PROPERTY_NAME  ,
         value = "pretty, json:target/cucumber.json, html:target/cucumber.html" )
 
 //@ConfigurationParameter(key = EXECUTION_DRY_RUN_PROPERTY_NAME, value = "true")
-//@ConfigurationParameter(key = FILTER_TAGS_PROPERTY_NAME, value = "@db")
+@ConfigurationParameter(key = FILTER_TAGS_PROPERTY_NAME, value = "@ui")
 public class TestRunner {
 
 
