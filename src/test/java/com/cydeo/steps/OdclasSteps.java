@@ -66,7 +66,6 @@ public class OdclasSteps {
         LinkedList<String> allNames = new LinkedList<>();
         for (WebElement email : listOFMails) {
 
-           BrowserUtil.waitFor(1);
             allNames.add(email.getText());
         }
 
