@@ -6,8 +6,10 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import net.bytebuddy.pool.TypePool;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -35,6 +37,7 @@ public class OdclasSteps {
 
        WebElement loginBTN =  Driver.getDriver().findElement(By.xpath("//input[@value='Log in to OK']"));
         loginBTN.click();
+        BrowserUtil.waitFor(3);
     }
 
     @And("On home page click {string} icon")
@@ -43,13 +46,13 @@ public class OdclasSteps {
         if (icon.equals("Message")){
         WebElement messageIcon = Driver.getDriver().findElement(By.xpath("//ul/li[1]/div/div[1][@class='toolbar_nav_i_ic']"));
         messageIcon.click();
-        BrowserUtil.waitFor(2);
+        BrowserUtil.waitFor(6);
     }
     if(icon.equals("Guests")){
 
         WebElement guestsIcon = Driver.getDriver().findElement(By.xpath("//li[@data-l='t,guests']"));
         guestsIcon.click();
-        BrowserUtil.waitFor(2);
+        BrowserUtil.waitFor(6);
 
     }
 
@@ -62,6 +65,8 @@ public class OdclasSteps {
 
         LinkedList<String> allNames = new LinkedList<>();
         for (WebElement email : listOFMails) {
+
+           BrowserUtil.waitFor(1);
             allNames.add(email.getText());
         }
 
