@@ -1,5 +1,5 @@
 
- @ui
+@ui
 Feature: New mails check
 
   As a user I can navigate on the website
