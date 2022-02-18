@@ -15,7 +15,10 @@ import io.cucumber.java.Scenario;
 import io.restassured.RestAssured;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
+import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
 public class Driver {
@@ -36,6 +39,20 @@ public class Driver {
 
             // according to browser type set up driver correctly
             switch (browserName ){
+
+//                case "remote-chrome":
+//                 try {
+//                     // assign your grid server address
+//                     String gridAddress = "54.235.53.73";
+//                     URL url = new URL("http://" + gridAddress + ":4444/wd/hub");
+//                     DesiredCapabilities desiredCapabilities = new DesiredCapabilities();
+//                     desiredCapabilities.setBrowserName("chrome");
+//                     driverPool.set(new RemoteWebDriver(url, desiredCapabilities));
+//                 }catch (Exception e){
+//                     e.printStackTrace();
+//                 }
+//                break;
+
                 case "chrome" :
                     WebDriverManager.chromedriver().setup();
                     obj = new ChromeDriver();
